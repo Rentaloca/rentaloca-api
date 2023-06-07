@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Google\Cloud\Storage\StorageClient;
+use Illuminate\Support\Facades\Storage;
+
 class UserController extends Controller
 {
     use PasswordValidationRules;
@@ -82,7 +87,8 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
-                'profile_photo_path' => $request->file('profile_photo_path')->store('assets/user', 'public'),
+                // 'profile_photo_path' => $request->file('profile_photo_path')->store('assets/user', 'public'),
+                'profile_photo_path' => $this->uploadFile($request->file('profile_photo_path'), 'assets/user', null),
                 'address' => $request->address,
                 'weight' => $request->weight,
                 'height' => $request->height,
@@ -120,17 +126,21 @@ class UserController extends Controller
 
         $user = Auth::user();
 
+        $path = $request->user()->profile_photo_path;
+        $request->hasFile('profile_photo_path') ? $this->deleteFile($path) : null;
+
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'profile_photo_path' => $request->file('profile_photo_path')->store('assets/user', 'public'),
-            'address' => $request->address,
-            'weight' => $request->weight,
-            'height' => $request->height,
-            'top_size' => $request->top_size,
-            'bottom_size' => $request->bottom_size,
-            'password' => Hash::make($request->password),
+            'name' => $request->name != null? $request->name : $request->user()->name,
+            'email' => $request->email != null? $request->email : $request->user()->email,
+            'phone_number' => $request->phone_number != null? $request->email : $request->user()->email,
+            // 'profile_photo_path' => $request->file('profile_photo_path')->store('assets/user', 'public'),
+            'profile_photo_path' => $request->file('profile_photo_path') != null ? $this->uploadFile($request->file('profile_photo_path'), 'assets/user', null) : $request->user()->profile_photo_path,
+            'address' => $request->address != null? $request->address : $request->user()->address,
+            'weight' => $request->weight != null? $request->weight : $request->user()->weight,
+            'height' => $request->height != null? $request->height : $request->user()->height,
+            'top_size' => $request->top_size != null? $request->top_size : $request->user()->top_size,
+            'bottom_size' => $request->bottom_size != null? $request->bottom_size : $request->user()->bottom_size,
+            'password' => $request->password != null? Hash::make($request->password) : $request->user()->password,
         ]);
 
         return ResponseFormatter::success($user,'Profile Updated');
@@ -148,7 +158,8 @@ class UserController extends Controller
 
         if ($request->file('file')) {
 
-            $file = $request->file->store('assets/user', 'public');
+            // $file = $request->file->store('assets/user', 'public');
+            $file = $this->uploadFile($request->file('profile_photo_path'), 'assets/user', null);
 
             //store your file into database
             $user = Auth::user();
@@ -158,4 +169,21 @@ class UserController extends Controller
             return ResponseFormatter::success([$file],'File successfully uploaded');
         }
     }
+
+    public function uploadFile(UploadedFile $file, $folder = null, $filename = null)
+    {
+        $name = !is_null($filename) ? $filename : Str::random(25);
+
+        return $file->storeAs(
+            $folder,
+            $name . "." . $file->getClientOriginalExtension(),
+            'gcs'
+        );
+    }
+
+    public function deleteFile($path = null)
+    {
+        Storage::disk('gcs')->delete($path);
+    }
+
 }
