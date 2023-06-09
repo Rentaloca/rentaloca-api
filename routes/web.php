@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\MidtransController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,3 +32,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+
+// Midtrans Related
+Route::get('midtrans/success', [MidtransController::class, 'success']);
+Route::get('midtrans/unfinish', [MidtransController::class, 'unfinish']);
+Route::get('midtrans/error', [MidtransController::class, 'error']);

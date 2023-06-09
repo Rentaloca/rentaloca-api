@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Helpers\ResponseFormatter;
 
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Google\Cloud\Storage\StorageClient;
+use Illuminate\Support\Facades\Storage;
+
 class ProductController extends Controller
 {
     public function all(Request $request)
@@ -50,5 +55,59 @@ class ProductController extends Controller
             $product->paginate($limit),
             'Data list produk berhasil diambil'
         );
+    }
+
+    public function addProduct(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+                'picture_path' => 'required|image|max:2048',
+                'price' => 'required',
+                'size' => 'required',
+                'bust' => 'required',
+                'waist' => 'required',
+                'hips' => 'required',
+                'length' => 'required',
+                'suitable_for_body_shape' => 'required',
+            ]);
+
+            $product = Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'picture_path' => $this->uploadFile($request->file('picture_path'), 'assets/product', null),
+                'price' => $request->price,
+                'size' => $request->size,
+                'bust' => $request->bust,
+                'waist' => $request->waist,
+                'hips' => $request->hips,
+                'length' => $request->length,
+                'suitable_for_body_shape' => $request->suitable_for_body_shape,
+            ]);
+
+            return ResponseFormatter::success($product, 'Product Added');
+        } catch (Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something went wrong',
+                'error' => $error,
+            ],'Authentication Failed', 500);
+        }
+    }
+
+    public function uploadFile(UploadedFile $file, $folder = null, $filename = null)
+    {
+        $name = !is_null($filename) ? $filename : Str::random(25);
+
+        return $file->storeAs(
+            $folder,
+            $name . "." . $file->getClientOriginalExtension(),
+            'gcs'
+        );
+    }
+
+    public function deleteFile($path = null)
+    {
+        Storage::disk('gcs')->delete($path);
     }
 }

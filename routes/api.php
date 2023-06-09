@@ -26,12 +26,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('transaction/{id}', [TransactionController::class, 'update']);
     Route::post('checkout', [TransactionController::class, 'checkout']);
     Route::post('logout', [UserController::class, 'logout']);
+
+    Route::post('product/add', [ProductController::class, 'addProduct']);
 });
 
 Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
-
-Route::post('tes', [UserController::class, 'deleteFile']);
 
 Route::get('product', [ProductController::class, 'all']);
 Route::post('midtrans/callback', [MidtransController::class, 'callback']);
