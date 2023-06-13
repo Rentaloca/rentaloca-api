@@ -21,7 +21,7 @@ use App\Http\Controllers\UserController;
 
 // Homepage
 Route::get('/', function () {
-    return redirect()->route('admin-dashboard');
+    return redirect()->route('dashboard');
 });
 
 // Dashboard
@@ -29,7 +29,7 @@ Route::prefix('dashboard')
     ->middleware(['auth:sanctum','admin'])
     ->group(function() {
         Route::get('/', [DashboardController::class, 'index'])
-            ->name('admin-dashboard');
+            ->name('dashboard');
         Route::resource('product', ProductController::class);
         Route::resource('users', UserController::class);
 

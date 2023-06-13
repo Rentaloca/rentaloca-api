@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -26,7 +27,19 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'phone_number',
+        // 'profile_photo_path',
+        'address',
+        'weight',
+        'height',
+        'top_size',
+        'bottom_size',
+        'password',
+        'roles',
+
     ];
 
     /**
@@ -56,6 +69,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $appends = [
-        'profile_photo_url',
+        'profile_photo_path',
     ];
+
+    public function getProfilePhotoPathAttribute()
+    {
+        return $this->attributes['profile_photo_path'] != null ?
+         Storage::url($this->attributes['profile_photo_path']) : null;
+    }
 }

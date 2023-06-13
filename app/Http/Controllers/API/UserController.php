@@ -88,7 +88,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 // 'profile_photo_path' => $request->file('profile_photo_path')->store('assets/user', 'public'),
-                'profile_photo_path' => $this->uploadFile($request->file('profile_photo_path'), 'assets/user', null),
+                'profile_photo_path' => null,
                 'address' => $request->address,
                 'weight' => $request->weight,
                 'height' => $request->height,
