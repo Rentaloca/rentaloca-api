@@ -30,8 +30,8 @@ Product-based Capstone, Bangkit 2023 Batch 1
 - Backend API on [Cloud Run](https://cloud.google.com/run/docs).
 - Database on [Cloud SQL](https://cloud.google.com/sql/docs).
 - Storage on [Cloud Storage](https://cloud.google.com/storage/docs).
-- Connection Cloud Run and Cloud SQL using [Serverless VPC Access](https://cloud.google.com/vpc/docs/configure-serverless-vpc-access).
-- Connection Cloud Run and Cloud Storage using [Service Account](https://cloud.google.com/iam/docs/keys-create-delete).
+- Connection with Cloud SQL using [Serverless VPC Access](https://cloud.google.com/vpc/docs/configure-serverless-vpc-access).
+- Connection with Cloud Storage using [Service Account](https://cloud.google.com/iam/docs/keys-create-delete).
 
 ## License
 
