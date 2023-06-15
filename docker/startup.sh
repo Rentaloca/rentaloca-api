@@ -1,9 +1,8 @@
 #!/bin/sh
 
-sed -i "s,LISTEN_PORT,$PORT,g" /etc/nginx/nginx.conf
+# update application cache
+php artisan optimize
 
-php-fpm -D
+# start the application
 
-while ! nc -w 1 -z 127.0.0.1 9000; do sleep 0.1; done;
-
-nginx
+php-fpm -D &&  nginx -g "daemon off;" && npm run dev
