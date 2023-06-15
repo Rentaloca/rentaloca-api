@@ -23,7 +23,7 @@ Product-based Capstone, Bangkit 2023 Batch 1
 
 ## Deployment on Google Cloud Platform
 
-<p align="center"><img src="public/storage/assets/arsitrektur.png"></p>
+<p align="center"><img src="public/arsitrektur.png"></p>
 
 - Backend API on [Cloud Run](https://cloud.google.com/run/docs).
 - Database on [Cloud SQL](https://cloud.google.com/sql/docs).
