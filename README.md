@@ -12,10 +12,12 @@ Product-based Capstone, Bangkit 2023 Batch 1
 
 ## Started
 
+<p align="center"><img src="public/erd.png"></p>
+
 - Clone repo `git clone https://github.com/Rentaloca/rentaloca-api.git`
 - Install Package `composer install`
-- add service account key from gcp
-- create database
+- Add service account key from gcp
+- Create database
 - Copy and set env `cp .env.example .env`
 - `php artisan key:generate`
 - `php artisan migrate`
