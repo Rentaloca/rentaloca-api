@@ -23,6 +23,11 @@ Product-based Capstone, Bangkit 2023 Batch 1
 - `php artisan migrate`
 - `php artisan serve`
 
+## Postman Documentation
+
+[https://documenter.getpostman.com/view/18351670/2s93sXcuNG](https://documenter.getpostman.com/view/18351670/2s93sXcuNG).
+
+
 ## Deployment on Google Cloud Platform
 
 <p align="center"><img src="public/arsitrektur.png"></p>
